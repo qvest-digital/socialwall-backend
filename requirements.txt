@@ -1,0 +1,15 @@
+Flask
+passlib
+oauth2
+pymongo
+flask
+flask_cors
+oauth2client
+datetime
+requests
+flask_htpasswd
+flask-jwt-extended
+httplib2
+docker-py
+tests
+apscheduler

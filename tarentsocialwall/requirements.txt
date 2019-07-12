@@ -1,0 +1,11 @@
+oauth2
+pymongo
+flask
+flask_cors
+oauth2client
+datetime
+requests
+httplib2
+flask_htpasswd
+flask_jwt_extended
+apscheduler

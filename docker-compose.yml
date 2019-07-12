@@ -1,0 +1,42 @@
+version: '2'
+services:
+  backend:
+    build: .
+    container_name: "socialwall-backend"
+    command: python -u RestController.py
+    ports:
+      - "12300:12300"
+    volumes:
+      - .:/backend
+    environment:
+      - PORT=12300
+      - DB=mongodb://mongodb:27017
+      - DEFAULT-AUTH=False
+      - LDAP-USE=True
+      - LDAP=
+      - LDAP-BASE=
+      - LDAP_USER_URI=
+      - LDAP_FILTER=
+      - DEBUG=True
+      - INTERVAL=15 # in minutes
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    environment:
+      - MONGO_DATA_DIR=/usr/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/usr/data/db
+    ports:
+      - 27017:27017
+#  web:
+#    image: socialwall-frontend:latest
+#    container_name: "socialwall-frontend"
+#    volumes:
+#      - .:/frontend
+#    ports:
+#      - 80:80
