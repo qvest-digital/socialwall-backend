@@ -14,6 +14,8 @@ The configuration can be found here: [docker-compose.yml](./docker-compose.yml)
 
 In folder "credentials/json_template" contains the templates for services
 
+Fill fields in a template file and move this into /credentials/ folder
+
  ###Backend:
 
     - PORT=12300                   - backend server port
