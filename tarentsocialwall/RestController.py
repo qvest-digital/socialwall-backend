@@ -104,10 +104,12 @@ def login():
             user= auth_ldap.authenticate_user(username, password)
             if user is None:
                 print("User %s not found" % username)
+                return jsonify({"msg": "User %s not found in ldap" % username}), HTTPStatus.BAD_REQUEST
             else:
                 print("User %s found" % username)
         except Exception as ex:
             print(ex)
+            return jsonify({"msg": "Exception by ldap"}), HTTPStatus.INTERNAL_SERVER_ERROR
     if eval(os.environ.get('DEFAULT-AUTH')):
         if user is None:
             if auth.authenticate_user(username, password) is None:
