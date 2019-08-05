@@ -1,6 +1,6 @@
 # TarentSocialWallPython
 
-This project is backend from project "SocialWall".
+This project is the backend from project "SocialWall".
 
 
 ## Software Architecture & Design 
@@ -12,7 +12,7 @@ The configuration can be found here: [docker-compose.yml](./docker-compose.yml)
 
 ### Authorization for access of different services
 
-In folder "credentials/json_template" contains the templates for services
+The folder "credentials/json_template" contains the templates for services.
 
 Fill fields in a template file and move this into /credentials/ folder
 
@@ -33,10 +33,4 @@ Fill fields in a template file and move this into /credentials/ folder
 ## Build and Run
     
     docker-compose up --build --force-recreate -d
-
-
-
-
-
-
 
