@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 
 from passlib.handlers.sha2_crypt import sha256_crypt
@@ -20,6 +21,8 @@ class MongoDBClient:
 
     client = None
     db = None
+    random_social_post_list = None
+    reset_counter = None
 
     def __init__(self, uri):
         # connect to MongoDB, change the << MONGODB URL >> to reflect your own connection string
@@ -36,6 +39,8 @@ class MongoDBClient:
             raise Exception("This class is a singleton!")
         else:
             MongoDBClient.__instance = self
+
+        self.update_all_socialposts()
 
     # write social_post into mongo
     def write_social_post(self, social_post: SocialPost):
@@ -55,25 +60,27 @@ class MongoDBClient:
             self.db.socialPosts.replace_one(update_identifier, social_post.__dict__)
         return 0
 
-    # read random social_post from mongo
+    # read random social_post from list
     def get_random_social_post(self) -> SocialPost:
 
-        timestamp_var = datetime.utcnow().timestamp()
-
-        doc = list(self.db.socialPosts.aggregate([{'$sample': {'size': 20}},
-                                                  {'$match': {'validFrom': {'$lte': timestamp_var},
-                                                              'validTo': {'$gte': timestamp_var}}}]))
-        if len(doc) == 0:
+        if len(self.random_social_post_list) == 0:
             return None
         else:
-            doc = doc[0]
+            if self.reset_counter >= len(self.random_social_post_list):
+                # when we went through all posts once we reset counter and shuffle list
+                # so we dont repeat the same circle of posts every time
+                self.reset_counter = 0
+                random.shuffle(self.random_social_post_list)
 
-        print(doc)
-        if doc is None:
+            post = self.random_social_post_list[self.reset_counter]
+            self.reset_counter = self.reset_counter + 1
+
+        print(post)
+        if post is None:
             return None
 
         social_post = SocialPost()
-        social_post.set_dictionary(doc)
+        social_post.set_dictionary(post)
         return social_post
 
     # read custom social_post from mongo
@@ -173,3 +180,12 @@ class MongoDBClient:
         user.firstname = 'admin'
         user.lastname = 'admin'
         self.write_user(user)
+
+    #Get all valid social posts from db and shuffle them in random order
+    def update_all_socialposts(self):
+        timestamp = datetime.utcnow().timestamp()
+        self.random_social_post_list = list(self.db.socialPosts.aggregate(
+            [{'$match': {'validFrom': {'$lte': timestamp}, 'validTo': {'$gte': timestamp}}}]))
+
+        random.shuffle(self.random_social_post_list)
+        self.reset_counter = 0
