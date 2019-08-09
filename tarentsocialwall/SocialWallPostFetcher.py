@@ -31,6 +31,7 @@ def fetch_posts_job():
     for insta_post in insta_posts:
         mongoClient.write_social_post(insta_post)
 
+    mongoClient.update_all_socialposts()
 
 # run once at startup, then at interval (see docker-compose)
 fetch_posts_job()
