@@ -2,6 +2,8 @@
 
 This project is the backend from project "SocialWall".
 
+## Next Steps
+For an easier deployment process of the SocialWall we are working towards moving the frontend and backend portion in a combined project. Because of this both repositories will become deprecated in the near future. 
 
 ## Software Architecture & Design 
 
